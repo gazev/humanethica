@@ -10,6 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto.ActivityDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.repository.ActivityRepository;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.AssessmentRepository;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.domain.Assessment;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.dto.AssessmentDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.AuthUserService;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.domain.AuthNormalUser;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.domain.AuthUser;
@@ -53,6 +56,9 @@ public class UserService {
 
     @Autowired
     private UserDocumentRepository userDocumentRepository;
+
+    @Autowired
+    private AssessmentRepository assessmentRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -204,6 +210,17 @@ public class UserService {
         Member member = (Member) authUser.getUser();
 
         return new InstitutionDto(member.getInstitution(), true, true);
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public List<AssessmentDto> getAssessments(Integer userId) {
+        if (userId == null) throw  new HEException(USER_NOT_FOUND);
+        userRepository.findById(userId).orElseThrow(() -> new HEException(USER_NOT_FOUND, userId));
+        
+        return assessmentRepository.getAssessmentsByVolunteerId(userId).stream()
+                .sorted(Comparator.comparing(Assessment::getReviewDate))
+                .map(AssessmentDto::new)
+                .toList();
     }
 
 }

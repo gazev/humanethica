@@ -53,6 +53,19 @@
             </template>
             <span>Apply for Activity</span>
           </v-tooltip>
+          <v-tooltip v-if="verifyConditions(item)" bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon
+                class="mr-2 action-button"
+                color="#4484CD"
+                v-on="on"
+                data-cy="writeAssessmentButton"
+                @click="openAssessmentDialog(item)"
+                >fa-solid fa-pen-to-square
+              </v-icon>
+            </template>
+            <span>Create Assessment</span>
+          </v-tooltip>
         </template>
       </v-data-table>
       <enrollment-dialog

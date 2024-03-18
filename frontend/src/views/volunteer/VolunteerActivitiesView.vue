@@ -208,6 +208,12 @@ export default class VolunteerActivitiesView extends Vue {
     }
   }
 
+  activityHasEnded(activity: Activity): boolean {
+    const currentDate = new Date();
+    const activityEndDate = new Date(activity.endingDate);
+    return currentDate > activityEndDate;
+  }
+
   onOpenEnrollmentDialog(activity: Activity) {
     this.currentActivity = activity;
     this.editEnrollmentDialog = true;

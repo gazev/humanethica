@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.repository.ActivityRepository;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.domain.Assessment;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.dto.AssessmentDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.ParticipationDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.domain.Participation;
@@ -52,4 +54,19 @@ public class ParticipationService {
 
         return new ParticipationDto(participation);
     }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public List<ParticipationDto> getVolunteerParticipations(Integer userId, Integer activityId) {
+        if (userId == null) throw new HEException(USER_NOT_FOUND);
+        userRepository.findById(userId).orElseThrow(() -> new HEException(USER_NOT_FOUND, userId));
+
+        if (activityId == null) throw  new HEException(ACTIVITY_NOT_FOUND);
+        activityRepository.findById(activityId).orElseThrow(() -> new HEException(ACTIVITY_NOT_FOUND, activityId));
+        
+        return participationRepository.getParticipationsForVolunteerId(userId, activityId).stream()
+                .sorted(Comparator.comparing(Participation::getAcceptanceDate))
+                .map(ParticipationDto::new)
+                .toList();
+    }
+
 }

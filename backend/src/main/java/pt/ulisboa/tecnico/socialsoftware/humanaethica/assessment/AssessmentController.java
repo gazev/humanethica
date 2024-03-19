@@ -28,4 +28,11 @@ public class AssessmentController {
         int userId = ((AuthUser) ((Authentication) principal).getPrincipal()).getUser().getId();
         return assessmentService.createAssessment(userId, institutionId, assessmentDto);
     }
+
+    @GetMapping("/volunteer")
+    @PreAuthorize("hasRole('ROLE_VOLUNTEER')")
+    public List<AssessmentDto> getVolunteerAssessments(Principal principal, @PathVariable Integer institutionId) {
+        int userId = ((AuthUser) ((Authentication) principal).getPrincipal()).getUser().getId();
+        return assessmentService.getVolunteerAssessments(userId, institutionId);
+    }
 }

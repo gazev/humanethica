@@ -528,6 +528,21 @@ export default class RemoteServices {
       });
   }
 
+  static async getVolunteerAssessments(
+    institutionId: number,
+  ): Promise<Assessment[]> {
+    return httpClient
+      .get(`/institutions/${institutionId}/assessments/volunteer`)
+      .then((response) => {
+        return response.data.map((assessment: any) => {
+          return new Assessment(assessment);
+        });
+      })
+      .catch(async (error) => {
+        throw Error(await this.errorMessage(error));
+      });
+  }
+
   // Theme Controller
 
   static async getThemes(): Promise<Theme[]> {

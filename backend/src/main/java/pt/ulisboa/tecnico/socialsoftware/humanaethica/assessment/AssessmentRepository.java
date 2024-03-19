@@ -14,6 +14,6 @@ public interface AssessmentRepository extends JpaRepository<Assessment, Integer>
     @Query("SELECT a FROM Assessment a WHERE a.institution.id = :institutionId")
     List<Assessment> getAssessmentsByInstitutionId(Integer institutionId);
 
-    @Query("SELECT a FROM Assessment a WHERE a.volunteer.id = :volunteerId")
-    List<Assessment> getAssessmentsByVolunteerId(Integer volunteerId);
+    @Query("SELECT a FROM Assessment a WHERE a.volunteer.id = :volunteerId and a.institution.id = :institutionId")
+    List<Assessment> getAssessmentsForVolunteerId(Integer volunteerId, Integer institutionId);
 }

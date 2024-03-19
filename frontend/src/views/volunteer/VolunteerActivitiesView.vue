@@ -207,11 +207,30 @@ export default class VolunteerActivitiesView extends Vue {
       }
     }
   }
+  async verifyConditions(activity: Activity): Promise<boolean> {
+    return (
+      this.activityHasEnded(activity) &&
+      !(await this.volunteerAlreadyRated(activity))
+    );
+  }
 
   activityHasEnded(activity: Activity): boolean {
     const currentDate = new Date();
     const activityEndDate = new Date(activity.endingDate);
     return currentDate > activityEndDate;
+  }
+
+  async volunteerAlreadyRated(activity: Activity) {
+    try {
+      const institutionId = activity.institution.id;
+      if (institutionId !== null) {
+        const volunteerAssessments =
+          await RemoteServices.getVolunteerAssessments(institutionId);
+        return volunteerAssessments.length > 0;
+      }
+    } catch (error) {
+      await this.$store.dispatch('error', error);
+    }
   }
 
   onOpenEnrollmentDialog(activity: Activity) {

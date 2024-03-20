@@ -31,7 +31,10 @@
       <template v-slot:[`item.action`]="{ item }">
         <v-tooltip bottom v-if="!item.participating">
           <template v-slot:activator="{ on }">
-            <v-icon class="mr-2 action-button" @click="func(item)" v-on="on"
+            <v-icon
+              class="mr-2 action-button"
+              @click="selectParticipant(item)"
+              v-on="on"
               >mdi-check-bold
             </v-icon>
           </template>
@@ -39,6 +42,12 @@
         </v-tooltip>
       </template>
     </v-data-table>
+    <select-participant-dialog
+      v-if="currentEnrollment && selectParticipantDialog"
+      v-model="selectParticipantDialog"
+      :enrollment="currentEnrollment"
+      v-on:close-select-participant-dialog="onCloseSelectParticipantDialog"
+    />
   </v-card>
 </template>
 
@@ -47,12 +56,20 @@ import { Component, Vue } from 'vue-property-decorator';
 import RemoteServices from '@/services/RemoteServices';
 import Activity from '@/models/activity/Activity';
 import Enrollment from '@/models/enrollment/Enrollment';
+import SelectParticipantDialog from '@/views/member/SelectParticipantDialog.vue';
 
-@Component({})
+@Component({
+  components: {
+    'select-participant-dialog': SelectParticipantDialog,
+  },
+})
 export default class InstitutionActivityEnrollmentsView extends Vue {
   activity!: Activity;
   enrollments: Enrollment[] = [];
   search: string = '';
+
+  currentEnrollment: Enrollment | null = null;
+  selectParticipantDialog: boolean = false;
 
   headers: object = [
     {
@@ -96,7 +113,15 @@ export default class InstitutionActivityEnrollmentsView extends Vue {
     this.$router.push({ name: 'institution-activities' }).catch(() => {});
   }
 
-  func(enrollment: Enrollment) {}
+  onCloseSelectParticipantDialog() {
+    this.currentEnrollment = null;
+    this.selectParticipantDialog = false;
+  }
+
+  selectParticipant(enrollment: Enrollment) {
+    this.currentEnrollment = enrollment;
+    this.selectParticipantDialog = true;
+  }
 }
 </script>
 

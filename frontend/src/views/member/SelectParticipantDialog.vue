@@ -9,6 +9,12 @@
           <v-text-field
             label="Rating (Optional)"
             data-cy="participationRating"
+            :rules="[
+              (v) =>
+                v == '' ||
+                isRatingValid(v) ||
+                'Rating is either none or a number between 1 and 5, inclusive',
+            ]"
             required
           ></v-text-field>
         </v-form>
@@ -52,6 +58,12 @@ export default class SelectParticipantDialog extends Vue {
 
   createParticipation() {
     console.log(this.editEnrollment);
+  }
+
+  isRatingValid(rating: any): boolean {
+    if (!/^\d+$/.test(rating)) return false;
+    const parsedValue = parseInt(rating);
+    return parsedValue >= 1 && parsedValue <= 5;
   }
 }
 </script>

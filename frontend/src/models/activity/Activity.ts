@@ -20,6 +20,7 @@ export default class Activity {
   formattedEndingDate!: string;
   applicationDeadline!: string;
   formattedApplicationDeadline!: string;
+  allowReview!: boolean | null;
 
   constructor(jsonObj?: Activity) {
     if (jsonObj) {

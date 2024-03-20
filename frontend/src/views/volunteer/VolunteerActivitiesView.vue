@@ -53,7 +53,7 @@
             </template>
             <span>Apply for Activity</span>
           </v-tooltip>
-          <v-tooltip v-if="verifyConditions(item)" bottom>
+          <v-tooltip v-if="item.allowReview" bottom>
             <template v-slot:activator="{ on }">
               <v-icon
                 class="mr-2 action-button"
@@ -187,6 +187,12 @@ export default class VolunteerActivitiesView extends Vue {
     try {
       this.activities = await RemoteServices.getActivities();
       this.volunteerEnrollments = await RemoteServices.getVolunteerEnrollments();
+      this.activities = await Promise.all(
+        this.activities.map(async (activity) => {
+          activity.allowReview = !(await this.verifyConditions(activity));
+          return activity;
+        }),
+      );
     } catch (error) {
       await this.$store.dispatch('error', error);
     }
@@ -210,7 +216,8 @@ export default class VolunteerActivitiesView extends Vue {
   async verifyConditions(activity: Activity): Promise<boolean> {
     return (
       this.activityHasEnded(activity) &&
-      !(await this.volunteerAlreadyRated(activity))
+      !(await this.volunteerAlreadyRated(activity)) &&
+      (await this.volunteerHasParticipation(activity))
     );
   }
 
@@ -231,6 +238,20 @@ export default class VolunteerActivitiesView extends Vue {
     } catch (error) {
       await this.$store.dispatch('error', error);
     }
+  }
+
+  async volunteerHasParticipation(activity: Activity) {
+    try {
+      const activityId = activity.id;
+      if (activityId !== null) {
+        const volunteerParticipations =
+          await RemoteServices.getVolunteerParticipations(activityId);
+        return volunteerParticipations.length > 0;
+      }
+    } catch (error) {
+      await this.$store.dispatch('error', error);
+    }
+    return false;
   }
 
   onOpenEnrollmentDialog(activity: Activity) {

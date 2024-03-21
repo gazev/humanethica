@@ -10,7 +10,11 @@
             <v-col cols="12">
               <v-text-field
                 label="*Review"
-                :rules="[(v) => !!v || 'Review is required']"
+                :rules="[
+                  (v) =>
+                    validReview(v) ||
+                    'Review must be longer than 10 characters',
+                ]"
                 required
                 v-model="editAssessment.review"
                 data-cy="nameInput"
@@ -29,12 +33,13 @@
           Close
         </v-btn>
         <v-btn
+          :disabled="!isValidReview"
           color="blue-darken-1"
           variant="text"
           @click="createAssessment"
           data-cy="saveAssessment"
         >
-          Save
+          Create Assessment
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -52,6 +57,8 @@ export default class AssessmentDialog extends Vue {
   @Prop({ type: Activity, required: true }) readonly activity!: Activity;
 
   editAssessment: Assessment = new Assessment();
+
+  isValidReview: Boolean = false;
 
   cypressCondition: boolean = false;
 
@@ -73,6 +80,13 @@ export default class AssessmentDialog extends Vue {
         await this.$store.dispatch('error', error);
       }
     }
+  }
+
+  validReview(value: any) {
+    if (value == null) return false;
+    if (value && typeof value === 'string' && value.length < 10) return false;
+    this.isValidReview = true;
+    return true;
   }
 }
 </script>

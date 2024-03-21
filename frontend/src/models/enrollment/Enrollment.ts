@@ -15,7 +15,7 @@ export default class Enrollment {
       this.enrollmentDateTime = ISOtoString(jsonObj.enrollmentDateTime);
       this.volunteerName = jsonObj.volunteerName;
       this.participating = jsonObj.participating;
-	  this.volunteerId = jsonObj.volunteerId;
+      this.volunteerId = jsonObj.volunteerId;
     }
   }
 }

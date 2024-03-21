@@ -574,15 +574,18 @@ export default class RemoteServices {
       });
   }
 
-  static async createParticipation(activityId: number, participation: Participation) {
-	return httpClient
-	  .post(`/activities/${activityId}/participations`, participation)
-	  .then((response) => {
-		return new Participation(response.data);
-	  })
-	  .catch(async (error) => {
-		throw Error(await this.errorMessage(error));
-	  });
+  static async createParticipation(
+    activityId: number,
+    participation: Participation,
+  ) {
+    return httpClient
+      .post(`/activities/${activityId}/participations`, participation)
+      .then((response) => {
+        return new Participation(response.data);
+      })
+      .catch(async (error) => {
+        throw Error(await this.errorMessage(error));
+      });
   }
 
   // Error

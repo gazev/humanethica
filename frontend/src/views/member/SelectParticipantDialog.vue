@@ -8,6 +8,7 @@
         <v-form ref="form" lazy-validation>
           <v-text-field
             label="Rating (Optional)"
+			v-model="participation.rating"
             data-cy="participationRating"
             :rules="[
               (v) =>
@@ -44,20 +45,38 @@
 <script lang="ts">
 import { Vue, Component, Model, Prop } from 'vue-property-decorator';
 import Enrollment from '@/models/enrollment/Enrollment';
+import Activity from '@/models/activity/Activity';
+import Participation from '@/models/participation/Participation';
+import RemoteServices from '@/services/RemoteServices';
 
 @Component({})
 export default class SelectParticipantDialog extends Vue {
   @Model('dialog', Boolean) dialog!: boolean;
   @Prop({ type: Enrollment, required: true }) readonly enrollment!: Enrollment;
+  @Prop({ type: Activity, required: true }) readonly activity!: Activity;
 
-  editEnrollment: Enrollment = new Enrollment();
+  participationEnrollment: Enrollment = new Enrollment();
+  participationActivity: Activity = new Activity();
+  participation: Participation = new Participation();
 
   async created() {
-    this.editEnrollment = new Enrollment(this.enrollment);
+    this.participationEnrollment = new Enrollment(this.enrollment);
+	this.participationActivity = new Activity(this.activity);
+	this.participation = new Participation(this.participation);
+	this.participation.activityId = this.participationActivity.id;
+	this.participation.volunteerId = this.participationEnrollment.volunteerId;
   }
 
-  createParticipation() {
-    console.log(this.editEnrollment);
+  async createParticipation() {
+	if(this.participation.activityId == null){return;}
+	if ((this.$refs.form as Vue & { validate: () => boolean }).validate()){
+		try {
+		  const result= await RemoteServices.createParticipation(this.participation.activityId, this.participation);
+		  this.$emit('save-select-participant', result);
+		} catch (error) {
+		  await this.$store.dispatch('error', error);
+		}
+	}
   }
 
   isRatingValid(rating: any): boolean {

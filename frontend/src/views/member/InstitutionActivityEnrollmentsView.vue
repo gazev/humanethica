@@ -29,7 +29,8 @@
         </v-card-title>
       </template>
       <template v-slot:[`item.action`]="{ item }">
-        <v-tooltip bottom v-if="!item.participating">
+        <v-tooltip bottom v-if="activity.participantsNumberLimit >
+              activity.numberOfParticipations && !item.participating">
           <template v-slot:activator="{ on }">
             <v-icon
               class="mr-2 action-button"
@@ -46,6 +47,8 @@
       v-if="currentEnrollment && selectParticipantDialog"
       v-model="selectParticipantDialog"
       :enrollment="currentEnrollment"
+	  :activity ="activity"
+	  v-on:save-select-participant = "onSaveSelectParticipant"
       v-on:close-select-participant-dialog="onCloseSelectParticipantDialog"
     />
   </v-card>
@@ -57,6 +60,7 @@ import RemoteServices from '@/services/RemoteServices';
 import Activity from '@/models/activity/Activity';
 import Enrollment from '@/models/enrollment/Enrollment';
 import SelectParticipantDialog from '@/views/member/SelectParticipantDialog.vue';
+import Participation from '@/models/participation/Participation';
 
 @Component({
   components: {
@@ -123,6 +127,15 @@ export default class InstitutionActivityEnrollmentsView extends Vue {
   async getActivities() {
     await this.$store.dispatch('setActivity', null);
     this.$router.push({ name: 'institution-activities' }).catch(() => {});
+  }
+
+  onSaveSelectParticipan(participation: Participation) {
+	for (let enrollment of this.enrollments){
+		if(enrollment.volunteerId == participation.volunteerId){
+			enrollment.participating = true;
+			break;
+		}
+	}
   }
 
   onCloseSelectParticipantDialog() {

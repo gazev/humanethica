@@ -40,6 +40,20 @@
             </template>
             <span>Report Activity</span>
           </v-tooltip>
+          <v-tooltip v-if="item.state === 'APPROVED'" bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon
+                  class="mr-2 action-button"
+                  color= #4484CD
+                  v-on="on"
+                  data-cy="reportButton"
+                  @click="applyForActivity(item)"
+              >fa-solid fa-circle-a
+              </v-icon
+              >
+            </template>
+            <span>Apply for Activity</span>
+          </v-tooltip>
         </template>
       </v-data-table>
     </v-card>
@@ -145,6 +159,9 @@ export default class VolunteerActivitiesView extends Vue {
         await this.$store.dispatch('error', error);
       }
     }
+  }
+
+  async applyForActivity(activity: Activity){
   }
 }
 </script>

@@ -68,6 +68,13 @@
           </v-tooltip>
         </template>
       </v-data-table>
+      <assessment-dialog
+        v-if="currentActivity && editAssessmentDialog"
+        v-model="editAssessmentDialog"
+        :activity="currentActivity"
+        v-on:save-assessment="saveAssessmentDialog"
+        v-on:close-assessment-dialog="closeAssessmentDialog"
+      />
       <enrollment-dialog
         v-if="currentActivity && editEnrollmentDialog"
         v-model="editEnrollmentDialog"
@@ -86,9 +93,12 @@ import Activity from '@/models/activity/Activity';
 import Enrollment from '@/models/enrollment/Enrollment';
 import EnrollmentDialog from '@/views/volunteer/EnrollmentDialog.vue';
 import { show } from 'cli-cursor';
+import AssessmentDialog from '@/views/volunteer/AssessmentDialog.vue';
+import Assessment from '@/models/assessment/Assessment';
 
 @Component({
   components: {
+    'assessment-dialog': AssessmentDialog,
     'enrollment-dialog': EnrollmentDialog,
   },
   methods: { show },
@@ -97,7 +107,9 @@ export default class VolunteerActivitiesView extends Vue {
   activities: Activity[] = [];
   volunteerEnrollments: Enrollment[] = [];
   search: string = '';
+
   currentActivity: Activity | null = null;
+  editAssessmentDialog: boolean = false;
   editEnrollmentDialog: boolean = false;
   headers: object = [
     {
@@ -213,6 +225,23 @@ export default class VolunteerActivitiesView extends Vue {
       }
     }
   }
+  openAssessmentDialog(assessment: Assessment) {
+    this.currentActivity = assessment;
+    console.log('this.currentActivity');
+    console.log(this.currentActivity);
+    this.editAssessmentDialog = true;
+  }
+
+  closeAssessmentDialog() {
+    this.currentActivity = null;
+    this.editAssessmentDialog = false;
+  }
+
+  saveAssessmentDialog() {
+    // TODO -> update activities
+    console.log('Assessment saved');
+  }
+  
   async verifyConditions(activity: Activity): Promise<boolean> {
     return (
       this.activityHasEnded(activity) &&

@@ -513,6 +513,20 @@ export default class RemoteServices {
 
   // Assessment Controller
 
+  static async createAssessment(
+    institutionId: number | null,
+    assessment: Assessment,
+  ): Promise<Assessment> {
+    return httpClient
+      .post(`/institutions/${institutionId}/assessments`, assessment)
+      .then((response) => {
+        return new Assessment(response.data);
+      })
+      .catch(async (error) => {
+        throw Error(await this.errorMessage(error));
+      });
+  }
+
   static async getInstitutionAssessments(
     institutionId: number | null,
   ): Promise<Assessment[]> {
@@ -558,7 +572,6 @@ export default class RemoteServices {
         throw Error(await this.errorMessage(error));
       });
   }
-
 
   // Theme Controller
 

@@ -136,6 +136,12 @@ export default class VolunteerActivitiesView extends Vue {
     },
   ];
 
+  activityDeadlinePassed(activity: Activity): boolean {
+    const currentDate = new Date();
+    const activityDeadline = new Date(activity.applicationDeadline);
+    return currentDate > activityDeadline;
+  }
+
   async created() {
     await this.$store.dispatch('loading');
     try {

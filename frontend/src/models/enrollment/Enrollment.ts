@@ -6,7 +6,7 @@ export default class Enrollment {
   enrollmentDateTime!: string;
   volunteerName!: string;
   participating!: boolean;
-  volunteerId! : number;
+  volunteerId!: number;
 
   constructor(jsonObj?: Enrollment) {
     if (jsonObj) {

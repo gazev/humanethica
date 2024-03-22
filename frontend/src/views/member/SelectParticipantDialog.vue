@@ -12,7 +12,7 @@
             data-cy="participationRating"
             :rules="[
               (v) =>
-                v == '' ||
+                v === '' ||
                 isRatingValid(v) ||
                 'Rating is either none or a number between 1 and 5, inclusive',
             ]"

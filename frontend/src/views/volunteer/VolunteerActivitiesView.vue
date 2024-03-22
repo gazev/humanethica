@@ -44,11 +44,11 @@
             <template v-slot:activator="{ on }">
               <v-icon
                   class="mr-2 action-button"
-                  color= #4484CD
+                  color= #0E4D92
                   v-on="on"
-                  data-cy="reportButton"
+                  data-cy="applyForActivityButton"
                   @click="applyForActivity(item)"
-              >fa-solid fa-circle-a
+              >fa-solid fa-user-plus
               </v-icon
               >
             </template>
@@ -135,12 +135,6 @@ export default class VolunteerActivitiesView extends Vue {
       width: '5%',
     },
   ];
-
-  activityDeadlinePassed(activity: Activity): boolean {
-    const currentDate = new Date();
-    const activityDeadline = new Date(activity.applicationDeadline);
-    return currentDate > activityDeadline;
-  }
 
   async created() {
     await this.$store.dispatch('loading');

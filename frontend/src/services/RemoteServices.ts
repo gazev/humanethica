@@ -484,6 +484,22 @@ export default class RemoteServices {
       });
   }
 
+  static async getVolunteerEnrollments(
+        activityId: number,
+      ): Promise<Enrollment[]> {
+        return httpClient
+          .get(`/activities/${activityId}/enrollments/volunteer`)
+          .then((response) => {
+            return response.data.map((enrollment: any) => {
+              return new Enrollment(enrollment);
+            });
+         })
+          .catch(async (error) => {
+            throw Error(await this.errorMessage(error));
+          });
+      }
+
+      
   // Assessment Controller
 
   static async getInstitutionAssessments(

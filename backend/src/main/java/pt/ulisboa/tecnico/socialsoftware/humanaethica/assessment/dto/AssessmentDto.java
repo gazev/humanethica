@@ -12,6 +12,7 @@ public class AssessmentDto {
     private String review;
     private String reviewDate;
     private InstitutionDto institution;
+    private String volunteerName;
 
     public AssessmentDto() {}
 
@@ -27,6 +28,8 @@ public class AssessmentDto {
         if (deepCopyInstitution && (assessment.getInstitution() != null)) {
             setInstitution(new InstitutionDto(assessment.getInstitution(), false, false));
         }
+        
+        this.volunteerName = assessment.getVolunteer().getName();
     }
 
     public Integer getId() {
@@ -61,4 +64,11 @@ public class AssessmentDto {
         this.institution = institution;
     }
 
+    public void getVolunteerName(String volunteerName) {
+        this.volunteerName = volunteerName;
+    }
+
+    public String getVolunteerName(){
+        return volunteerName;
+    }
 }

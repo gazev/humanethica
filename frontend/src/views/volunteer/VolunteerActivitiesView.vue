@@ -240,9 +240,13 @@ export default class VolunteerActivitiesView extends Vue {
     this.editAssessmentDialog = false;
   }
 
-  saveAssessmentDialog() {
-    // TODO -> update activities
-    console.log('Assessment saved');
+  async saveAssessmentDialog(assessment: Assessment) {
+    this.volunteerAssessments = this.volunteerAssessments.filter(
+      (a) => a.id !== assessment.id,
+    );
+    this.volunteerAssessments.unshift(assessment);
+    this.editAssessmentDialog = false;
+    this.currentActivity = null;
   }
 
   verifyConditions(activity: Activity): boolean {

@@ -22,15 +22,33 @@ describe('Participation', () => {
     cy.get('[data-cy="activities"]').click();
     cy.wait('@getInstitutions');
 
+	cy.get('[data-cy="memberActivitiesTable"] tbody tr')
+  	  .should('have.length', 2);
+
+	cy.get('[data-cy="memberActivitiesTable"] tbody tr')
+	  .first()
+	  .children()
+	  .eq(3)
+	  .should('contain', 1);
+
     cy.get('[data-cy="showEnrollments"').first().click();
     cy.wait('@getEnrollments');
+
+	cy.get('[data-cy="activityEnrollmentsTable"] tbody tr')
+      .should('have.length', 2);
+
+	cy.get('[data-cy="activityEnrollmentsTable"] tbody tr')
+	  .first()
+	  .children()
+	  .eq(2)
+	  .should('contain', false);
 
     cy.get('[data-cy="selectParticipant"').click();
     cy.get('[data-cy="participationRating"').type(RATING);
     cy.get('[data-cy="createParticipation"').click();
     cy.wait('@createParticipation');
     cy.get('.v-btn span').contains('Close').click();
-    
+
     cy.get('[data-cy="activityEnrollmentsTable"] tbody tr')
       .should('have.length', 2)
       .eq(0)

@@ -47,6 +47,7 @@
                   color= #0E4D92
                   v-on="on"
                   data-cy="applyForActivityButton"
+                  :disabled="!verifyConditions(item)"
                   @click="applyForActivity(item)"
               >fa-solid fa-user-plus
               </v-icon
@@ -135,6 +136,31 @@ export default class VolunteerActivitiesView extends Vue {
       width: '5%',
     },
   ];
+
+  async verifyConditions(activity: Activity): Promise<boolean> {
+    return (
+        this.activityDeadlinePassed(activity) &&
+        !(await this.volunteerAlreadyApplied(activity))
+    );
+  }
+
+  activityDeadlinePassed(activity: Activity): boolean {
+    const currentDate = new Date();
+    const activityDeadline = new Date(activity.applicationDeadline);
+    return currentDate > activityDeadline;
+  }
+
+  async volunteerAlreadyApplied(activity: Activity){
+    try{
+      const activityId = activity.id;
+      if (activityId !== null){
+        const volunteerEnrollments = await RemoteServices.getVolunteerEnrollments(activityId);
+        return volunteerEnrollments.length > 0;
+      }
+    } catch (error) {
+      await this.$store.dispatch('error', error);
+    }
+  }
 
   async created() {
     await this.$store.dispatch('loading');

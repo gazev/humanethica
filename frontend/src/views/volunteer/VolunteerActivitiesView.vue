@@ -44,18 +44,24 @@
             <template v-slot:activator="{ on }">
               <v-icon
                   class="mr-2 action-button"
-                  color= #0E4D92
+                  color="#0E4D92"
                   v-on="on"
                   data-cy="applyForActivityButton"
-                  @click="applyForActivity(item)"
+                  @click="openEnrollmentDialog(item)"
               >fa-solid fa-user-plus
-              </v-icon
-              >
+              </v-icon>
             </template>
             <span>Apply for Activity</span>
           </v-tooltip>
         </template>
       </v-data-table>
+      <enrollment-dialog
+        v-if="currentActivity && editEnrollmentDialog"
+        v-model="editEnrollmentDialog"
+        :activity="currentActivity"
+        v-on:save-enrollment="saveEnrollmentDialog"
+        v-on:close-enrollment-dialog="closeEnrollmentDialog"
+      />
     </v-card>
   </div>
 </template>
@@ -65,15 +71,21 @@ import { Component, Vue } from 'vue-property-decorator';
 import RemoteServices from '@/services/RemoteServices';
 import Activity from '@/models/activity/Activity';
 import Enrollment from '@/models/enrollment/Enrollment';
+import EnrollmentDialog from '@/views/volunteer/EnrollmentDialog.vue';
 import { show } from 'cli-cursor';
 
 @Component({
+  components: {
+    'enrollment-dialog': EnrollmentDialog,
+  },
   methods: { show },
 })
 export default class VolunteerActivitiesView extends Vue {
   activities: Activity[] = [];
   volunteerEnrollments: Enrollment[] = [];
   search: string = '';
+  currentActivity: Activity | null = null;
+  editEnrollmentDialog: boolean = false;
   headers: object = [
     {
       text: 'Name',
@@ -184,6 +196,23 @@ export default class VolunteerActivitiesView extends Vue {
   }
 
   async applyForActivity(activity: Activity){
+  }
+
+  openEnrollmentDialog(activity: Activity) {
+    this.currentActivity = activity;
+    console.log('this.currentActivity');
+    console.log(this.currentActivity);
+    this.editEnrollmentDialog = true;
+  }
+
+  closeEnrollmentDialog() {
+    this.currentActivity = null;
+    this.editEnrollmentDialog = false;
+  }
+
+  saveEnrollmentDialog() {
+    // TODO -> update activities
+    console.log('Enrollment saved');
   }
 }
 </script>

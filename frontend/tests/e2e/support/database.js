@@ -25,6 +25,14 @@ dayBeforeYesterday.setDate(now.getDate() - 2);
 
 Cypress.Commands.add('deleteAllButArs', () => {
   cy.task('queryDatabase', {
+    query: "DELETE FROM ENROLLMENT",
+    credentials: credentials,
+  })
+  cy.task('queryDatabase', {
+    query: "DELETE FROM PARTICIPATION",
+    credentials: credentials,
+  })
+  cy.task('queryDatabase', {
     query: "DELETE FROM ACTIVITY",
     credentials: credentials,
   })
@@ -135,6 +143,33 @@ function generateUserTuple(id, userType, name, role, institutionId) {
 function generateInstitutionTuple(id) {
   return "VALUES ('"
     + id + "', 't', 'abca428c09862e89', '2022-08-06 17:58:21.402146','demo_institution@mail.com', 'DEMO INSTITUTION', '000000000', '2024-02-06 17:58:21.402134')";
+}
+
+function generateActivityTuple(
+  id,
+  application_deadline,
+  creation_date,
+  description,
+  ending_date,
+  name,
+  participants_number_limit,
+  region,
+  starting_date,
+  state,
+  institution_id
+) {
+  return "VALUES ('"
+    + id + "', '"
+    + application_deadline + "', '"
+    + creation_date + "', '"
+    + description + "', '"
+    + ending_date + "', '"
+    + name + "', '"
+    + participants_number_limit + "', '"
+    + region + "', '"
+    + starting_date + "', '"
+    + state + "', "
+    + institution_id + ")";
 }
 
 function generateEnrollmentTuple(

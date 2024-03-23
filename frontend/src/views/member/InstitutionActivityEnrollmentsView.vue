@@ -40,6 +40,7 @@
             <v-icon
               class="mr-2 action-button"
               @click="selectParticipant(item)"
+              data-cy="selectParticipant"
               v-on="on"
               >mdi-check-bold
             </v-icon>

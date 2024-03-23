@@ -47,7 +47,7 @@
                   color="#0E4D92"
                   v-on="on"
                   data-cy="applyForActivityButton"
-                  @click="openEnrollmentDialog(item)"
+                  @click="onOpenEnrollmentDialog(item)"
               >fa-solid fa-user-plus
               </v-icon>
             </template>
@@ -59,8 +59,8 @@
         v-if="currentActivity && editEnrollmentDialog"
         v-model="editEnrollmentDialog"
         :activity="currentActivity"
-        v-on:save-enrollment="saveEnrollmentDialog"
-        v-on:close-enrollment-dialog="closeEnrollmentDialog"
+        v-on:save-enrollment="onSaveEnrollmentDialog"
+        v-on:close-enrollment-dialog="onCloseEnrollmentDialog"
       />
     </v-card>
   </div>
@@ -198,23 +198,26 @@ export default class VolunteerActivitiesView extends Vue {
   async applyForActivity(activity: Activity){
   }
 
-  openEnrollmentDialog(activity: Activity) {
+  onOpenEnrollmentDialog(activity: Activity) {
     this.currentActivity = activity;
-    console.log('this.currentActivity');
-    console.log(this.currentActivity);
     this.editEnrollmentDialog = true;
   }
 
-  closeEnrollmentDialog() {
+  onCloseEnrollmentDialog() {
     this.currentActivity = null;
     this.editEnrollmentDialog = false;
   }
 
-  saveEnrollmentDialog() {
-    // TODO -> update activities
-    console.log('Enrollment saved');
+  async onSaveEnrollmentDialog(enrollment: Enrollment) {
+    this.volunteerEnrollments = this.volunteerEnrollments.filter(
+      (enr) => enr.id !== enrollment.id,
+    );
+    this.volunteerEnrollments.unshift(enrollment);
+    this.editEnrollmentDialog = false;
+    this.currentActivity = null;
   }
 }
+
 </script>
 
 <style lang="scss" scoped></style>

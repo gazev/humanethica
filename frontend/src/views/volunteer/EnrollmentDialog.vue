@@ -58,8 +58,6 @@ export default class EnrollmentDialog extends Vue {
   async createEnrollment() {
     if ((this.$refs.form as Vue & { validate: () => boolean }).validate()) {
       try {
-        console.log('this.activity.id');
-        console.log(this.activity.id);
         const result = await RemoteServices.createEnrollment(
           this.activity.id,
           this.editEnrollment,

@@ -50,20 +50,17 @@ public class AssessmentService {
         Assessment assessment = new Assessment(institution, volunteer, assessmentDto);
         assessmentRepository.save(assessment);
 
-        return new AssessmentDto(assessment);
+        return new AssessmentDto(assessment, true);
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public List<AssessmentDto> getVolunteerAssessments(Integer userId, Integer institutionId) {
+    public List<AssessmentDto> getVolunteerAssessments(Integer userId) {
         if (userId == null) throw new HEException(USER_NOT_FOUND);
         userRepository.findById(userId).orElseThrow(() -> new HEException(USER_NOT_FOUND, userId));
 
-        if (institutionId == null) throw  new HEException(INSTITUTION_NOT_FOUND);
-        institutionRepository.findById(institutionId).orElseThrow(() -> new HEException(INSTITUTION_NOT_FOUND, institutionId));
-        
-        return assessmentRepository.getAssessmentsForVolunteerId(userId, institutionId).stream()
+        return assessmentRepository.getAssessmentsForVolunteerId(userId).stream()
                 .sorted(Comparator.comparing(Assessment::getReviewDate))
-                .map(AssessmentDto::new)
+                .map(assessment-> new AssessmentDto(assessment, true))
                 .toList();
     }
 }

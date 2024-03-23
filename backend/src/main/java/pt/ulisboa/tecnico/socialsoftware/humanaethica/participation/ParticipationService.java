@@ -56,14 +56,11 @@ public class ParticipationService {
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public List<ParticipationDto> getVolunteerParticipations(Integer userId, Integer activityId) {
+    public List<ParticipationDto> getVolunteerParticipations(Integer userId) {
         if (userId == null) throw new HEException(USER_NOT_FOUND);
         userRepository.findById(userId).orElseThrow(() -> new HEException(USER_NOT_FOUND, userId));
 
-        if (activityId == null) throw  new HEException(ACTIVITY_NOT_FOUND);
-        activityRepository.findById(activityId).orElseThrow(() -> new HEException(ACTIVITY_NOT_FOUND, activityId));
-        
-        return participationRepository.getParticipationsForVolunteerId(userId, activityId).stream()
+        return participationRepository.getParticipationsForVolunteerId(userId).stream()
                 .sorted(Comparator.comparing(Participation::getAcceptanceDate))
                 .map(ParticipationDto::new)
                 .toList();

@@ -542,11 +542,9 @@ export default class RemoteServices {
       });
   }
 
-  static async getVolunteerAssessments(
-    institutionId: number,
-  ): Promise<Assessment[]> {
+  static async getVolunteerAssessments(): Promise<Assessment[]> {
     return httpClient
-      .get(`/institutions/${institutionId}/assessments/volunteer`)
+      .get('/assessments/volunteer')
       .then((response) => {
         return response.data.map((assessment: any) => {
           return new Assessment(assessment);
@@ -558,11 +556,10 @@ export default class RemoteServices {
   }
 
   // Participation Controller
-  static async getVolunteerParticipations(
-    activityId: number,
-  ): Promise<Participation[]> {
+
+  static async getVolunteerParticipations(): Promise<Participation[]> {
     return httpClient
-      .get(`/activities/${activityId}/participations/volunteer`)
+      .get('/participations/volunteer')
       .then((response) => {
         return response.data.map((participation: any) => {
           return new Participation(participation);

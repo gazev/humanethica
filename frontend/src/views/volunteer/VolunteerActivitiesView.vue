@@ -95,6 +95,7 @@ import EnrollmentDialog from '@/views/volunteer/EnrollmentDialog.vue';
 import { show } from 'cli-cursor';
 import AssessmentDialog from '@/views/volunteer/AssessmentDialog.vue';
 import Assessment from '@/models/assessment/Assessment';
+import Participation from '@/models/participation/Participation';
 
 @Component({
   components: {
@@ -105,6 +106,9 @@ import Assessment from '@/models/assessment/Assessment';
 })
 export default class VolunteerActivitiesView extends Vue {
   activities: Activity[] = [];
+  volunteerParticipations: Participation[] = [];
+  volunteerAssessments: Assessment[] = [];
+
   volunteerEnrollments: Enrollment[] = [];
   search: string = '';
 
@@ -199,12 +203,10 @@ export default class VolunteerActivitiesView extends Vue {
     try {
       this.activities = await RemoteServices.getActivities();
       this.volunteerEnrollments = await RemoteServices.getVolunteerEnrollments();
-      this.activities = await Promise.all(
-        this.activities.map(async (activity) => {
-          activity.allowReview = !(await this.verifyConditions(activity));
-          return activity;
-        }),
-      );
+      this.volunteerAssessments =
+        await RemoteServices.getVolunteerAssessments();
+      this.volunteerParticipations =
+        await RemoteServices.getVolunteerParticipations();
     } catch (error) {
       await this.$store.dispatch('error', error);
     }
@@ -225,6 +227,7 @@ export default class VolunteerActivitiesView extends Vue {
       }
     }
   }
+
   openAssessmentDialog(assessment: Assessment) {
     this.currentActivity = assessment;
     console.log('this.currentActivity');
@@ -241,12 +244,12 @@ export default class VolunteerActivitiesView extends Vue {
     // TODO -> update activities
     console.log('Assessment saved');
   }
-  
-  async verifyConditions(activity: Activity): Promise<boolean> {
+
+  verifyConditions(activity: Activity): boolean {
     return (
       this.activityHasEnded(activity) &&
-      !(await this.volunteerAlreadyRated(activity)) &&
-      (await this.volunteerHasParticipation(activity))
+      !this.volunteerAlreadyRated(activity) &&
+      this.volunteerHasParticipation(activity)
     );
   }
 
@@ -256,31 +259,16 @@ export default class VolunteerActivitiesView extends Vue {
     return currentDate > activityEndDate;
   }
 
-  async volunteerAlreadyRated(activity: Activity) {
-    try {
-      const institutionId = activity.institution.id;
-      if (institutionId !== null) {
-        const volunteerAssessments =
-          await RemoteServices.getVolunteerAssessments(institutionId);
-        return volunteerAssessments.length > 0;
-      }
-    } catch (error) {
-      await this.$store.dispatch('error', error);
-    }
+  volunteerAlreadyRated(activity: Activity) {
+    return this.volunteerAssessments.some(
+      (assessment) => assessment.institution.id === activity.institution.id,
+    );
   }
 
-  async volunteerHasParticipation(activity: Activity) {
-    try {
-      const activityId = activity.id;
-      if (activityId !== null) {
-        const volunteerParticipations =
-          await RemoteServices.getVolunteerParticipations(activityId);
-        return volunteerParticipations.length > 0;
-      }
-    } catch (error) {
-      await this.$store.dispatch('error', error);
-    }
-    return false;
+  volunteerHasParticipation(activity: Activity) {
+    return this.volunteerParticipations.some(
+      (participation) => participation.activityId === activity.id,
+    );
   }
 
   onOpenEnrollmentDialog(activity: Activity) {

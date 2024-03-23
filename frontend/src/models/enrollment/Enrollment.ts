@@ -13,7 +13,6 @@ export default class Enrollment {
   activity!: Activity;
   volunteer!: Volunteer;
 
-
   constructor(jsonObj?: Enrollment) {
     if (jsonObj) {
       this.id = jsonObj.id;

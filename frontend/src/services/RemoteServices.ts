@@ -484,11 +484,9 @@ export default class RemoteServices {
       });
   }
 
-  static async getVolunteerEnrollments(
-        activityId: number,
-      ): Promise<Enrollment[]> {
+  static async getVolunteerEnrollments(): Promise<Enrollment[]> {
         return httpClient
-          .get(`/activities/${activityId}/enrollments/volunteer`)
+          .get('/enrollments/volunteer')
           .then((response) => {
             return response.data.map((enrollment: any) => {
               return new Enrollment(enrollment);

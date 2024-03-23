@@ -40,14 +40,13 @@
             </template>
             <span>Report Activity</span>
           </v-tooltip>
-          <v-tooltip v-if="item.state === 'APPROVED'" bottom>
+          <v-tooltip v-if="verifyEnrollmentConditions(item)" bottom>
             <template v-slot:activator="{ on }">
               <v-icon
                   class="mr-2 action-button"
                   color= #0E4D92
                   v-on="on"
                   data-cy="applyForActivityButton"
-                  :disabled="!verifyConditions(item)"
                   @click="applyForActivity(item)"
               >fa-solid fa-user-plus
               </v-icon
@@ -65,6 +64,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import RemoteServices from '@/services/RemoteServices';
 import Activity from '@/models/activity/Activity';
+import Enrollment from '@/models/enrollment/Enrollment';
 import { show } from 'cli-cursor';
 
 @Component({
@@ -72,6 +72,7 @@ import { show } from 'cli-cursor';
 })
 export default class VolunteerActivitiesView extends Vue {
   activities: Activity[] = [];
+  volunteerEnrollments: Enrollment[] = [];
   search: string = '';
   headers: object = [
     {
@@ -137,10 +138,10 @@ export default class VolunteerActivitiesView extends Vue {
     },
   ];
 
-  async verifyConditions(activity: Activity): Promise<boolean> {
+  verifyEnrollmentConditions(activity: Activity): boolean {
     return (
-        this.activityDeadlinePassed(activity) &&
-        !(await this.volunteerAlreadyApplied(activity))
+        !(this.activityDeadlinePassed(activity)) &&
+        !(this.volunteerAlreadyApplied(activity))
     );
   }
 
@@ -150,22 +151,17 @@ export default class VolunteerActivitiesView extends Vue {
     return currentDate > activityDeadline;
   }
 
-  async volunteerAlreadyApplied(activity: Activity){
-    try{
-      const activityId = activity.id;
-      if (activityId !== null){
-        const volunteerEnrollments = await RemoteServices.getVolunteerEnrollments(activityId);
-        return volunteerEnrollments.length > 0;
-      }
-    } catch (error) {
-      await this.$store.dispatch('error', error);
-    }
+  volunteerAlreadyApplied(activity: Activity){
+    return this.volunteerEnrollments.some(
+      (enrollment) => enrollment.activity.id === activity.id,
+    );
   }
 
   async created() {
     await this.$store.dispatch('loading');
     try {
       this.activities = await RemoteServices.getActivities();
+      this.volunteerEnrollments = await RemoteServices.getVolunteerEnrollments();
     } catch (error) {
       await this.$store.dispatch('error', error);
     }

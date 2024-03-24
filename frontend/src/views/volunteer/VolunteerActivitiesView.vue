@@ -228,8 +228,13 @@ export default class VolunteerActivitiesView extends Vue {
     }
   }
 
+<<<<<<< HEAD
   openAssessmentDialog(assessment: Assessment) {
     this.currentActivity = assessment;
+=======
+  openAssessmentDialog(activity: Activity) {
+    this.currentActivity = activity;
+>>>>>>> fb39caa (chore: remove unnecessary code)
     console.log('this.currentActivity');
     console.log(this.currentActivity);
     this.editAssessmentDialog = true;

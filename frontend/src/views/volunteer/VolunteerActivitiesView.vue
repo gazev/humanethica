@@ -228,18 +228,10 @@ export default class VolunteerActivitiesView extends Vue {
     }
   }
 
-<<<<<<< HEAD
-  openAssessmentDialog(assessment: Assessment) {
-    this.currentActivity = assessment;
-=======
   openAssessmentDialog(activity: Activity) {
     this.currentActivity = activity;
->>>>>>> fb39caa (chore: remove unnecessary code)
-    console.log('this.currentActivity');
-    console.log(this.currentActivity);
     this.editAssessmentDialog = true;
   }
-
   closeAssessmentDialog() {
     this.currentActivity = null;
     this.editAssessmentDialog = false;
@@ -270,10 +262,10 @@ export default class VolunteerActivitiesView extends Vue {
 
   volunteerAlreadyRated(activity: Activity) {
     return this.volunteerAssessments.some(
-      (assessment) => assessment.institution.id === activity.institution.id,
+      (assessment) => assessment.institutionId === activity.institution.id,
     );
   }
-
+  
   volunteerHasParticipation(activity: Activity) {
     return this.volunteerParticipations.some(
       (participation) => participation.activityId === activity.id,

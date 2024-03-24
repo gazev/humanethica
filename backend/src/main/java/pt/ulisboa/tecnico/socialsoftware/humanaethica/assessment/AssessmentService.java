@@ -50,7 +50,7 @@ public class AssessmentService {
         Assessment assessment = new Assessment(institution, volunteer, assessmentDto);
         assessmentRepository.save(assessment);
 
-        return new AssessmentDto(assessment, true);
+        return new AssessmentDto(assessment);
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -60,7 +60,7 @@ public class AssessmentService {
 
         return assessmentRepository.getAssessmentsForVolunteerId(userId).stream()
                 .sorted(Comparator.comparing(Assessment::getReviewDate))
-                .map(assessment-> new AssessmentDto(assessment, true))
+                .map(AssessmentDto::new)
                 .toList();
     }
 }

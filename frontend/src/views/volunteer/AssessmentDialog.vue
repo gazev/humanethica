@@ -17,7 +17,7 @@
                 ]"
                 required
                 v-model="editAssessment.review"
-                data-cy="nameInput"
+                data-cy="reviewInput"
               ></v-text-field>
             </v-col>
           </v-row>

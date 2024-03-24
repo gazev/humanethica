@@ -20,12 +20,12 @@ public class ActivityDto {
     private String creationDate;
     private List<ThemeDto> themes;
     private InstitutionDto institution;
-	private Integer numberOfParticipations;
+    private Integer numberOfParticipations;
 
-    public ActivityDto(){
+    public ActivityDto() {
     }
 
-    public ActivityDto(Activity activity, boolean deepCopyInstitution){
+    public ActivityDto(Activity activity, boolean deepCopyInstitution) {
         setId(activity.getId());
         setName(activity.getName());
         setRegion(activity.getRegion());
@@ -33,7 +33,7 @@ public class ActivityDto {
         setDescription(activity.getDescription());
 
         this.themes = activity.getThemes().stream()
-                .map(theme->new ThemeDto(theme,false, true, false))
+                .map(theme -> new ThemeDto(theme, false, true, false))
                 .toList();
 
         setState(activity.getState().name());
@@ -43,11 +43,11 @@ public class ActivityDto {
         setApplicationDeadline(DateHandler.toISOString(activity.getApplicationDeadline()));
 
         if (deepCopyInstitution && (activity.getInstitution() != null)) {
-			setInstitution(new InstitutionDto(activity.getInstitution(), false, false));
+            setInstitution(new InstitutionDto(activity.getInstitution(), false, false));
 
         }
 
-		setNumberOfParticipations(activity.getParticipations().size());
+        setNumberOfParticipations(activity.getParticipations().size());
     }
 
     public void setThemes(List<ThemeDto> themes) {
@@ -74,9 +74,13 @@ public class ActivityDto {
         this.name = name;
     }
 
-    public String getRegion() { return region; }
+    public String getRegion() {
+        return region;
+    }
 
-    public void setRegion(String region) { this.region = region; }
+    public void setRegion(String region) {
+        this.region = region;
+    }
 
 
     public String getDescription() {
@@ -167,7 +171,7 @@ public class ActivityDto {
                 ", creationDate='" + creationDate + '\'' +
                 ", themes=" + themes +
                 ", institution=" + institution +
-				", numberOfParticipations=" + numberOfParticipations +
+                ", numberOfParticipations=" + numberOfParticipations +
                 '}';
     }
 }

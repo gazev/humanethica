@@ -10,6 +10,7 @@ describe('Activity', () => {
   });
 
   it('create assessment', () => {
+    const REVIEW = 'This is a test review.';
     cy.demoVolunteerLogin();
     // intercept get activities request
     cy.intercept('GET', '/activities').as('getActivities');
@@ -25,7 +26,19 @@ describe('Activity', () => {
       .should('have.length', 10)
     cy.get('[data-cy="volunteerActivitiesTable"] tbody tr')
       .eq(0).children().eq(0).should('contain', "A1") // Verify that the first activity in the table is named A1.
+  
+    // Go to the volunteer activities view
+    cy.get('[data-cy="volunteerActivities"]').first().click();
+    // Click the "Write Assessment" button
+    cy.get('[data-cy="writeAssessmentButton"]').click();
+    // Type into the review field
+    cy.get('[data-cy="reviewInput"]').type(REVIEW);
+    // Click the "Create Assessment" button
+    cy.get('[data-cy="saveAssessment"]').click();
+  
+    cy.wait(1000);
     cy.logout();
-  })
+
+  });
 
 });

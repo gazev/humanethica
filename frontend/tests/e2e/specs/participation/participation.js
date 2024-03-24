@@ -14,7 +14,6 @@ describe('Participation', () => {
   it('ars login and get users', () => {
     cy.demoMemberLogin()
     cy.intercept('GET', '/users/*/getInstitution').as('getInstitutions');
-    cy.intercept('GET', '/activities').as('getActivities');
     cy.intercept('GET', '/activities/*/enrollments').as('getEnrollments');
     cy.intercept('POST', '/activities/*/participations').as('createParticipation');
 

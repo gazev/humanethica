@@ -128,8 +128,13 @@ Cypress.Commands.add('createAssessmentsDemoEntities', () => {
 
   // insert participations
   cy.task('queryDatabase', {
-    query: "INSERT INTO " + PARTICIPATION_COLUMNS + generateParticipationTuple(1,	"2024-02-06 18:51:37.595713",	5,	1,	3),
+    query: "INSERT INTO " + PARTICIPATION_COLUMNS + generateParticipationTuple(1,	"2024-02-06 18:51:37.595713",	5,	1,	3),credentials: credentials,
+  })
+  cy.task('queryDatabase', {
     query: "INSERT INTO " + PARTICIPATION_COLUMNS + generateParticipationTuple(2,	"2024-02-06 18:51:37.595713",	5,	2,	3),
+    credentials: credentials,
+  })
+  cy.task('queryDatabase', {
     query: "INSERT INTO " + PARTICIPATION_COLUMNS + generateParticipationTuple(3,	"2024-02-06 18:51:37.595713",	5,	6,	3),
     credentials: credentials,
   })

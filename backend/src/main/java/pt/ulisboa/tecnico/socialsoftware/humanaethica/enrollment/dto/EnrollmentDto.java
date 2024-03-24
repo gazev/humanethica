@@ -18,11 +18,7 @@ public class EnrollmentDto {
     public EnrollmentDto() {
     }
 
-    public EnrollmentDto(Enrollment enrollment) {
-        this(enrollment, false);
-    }
-
-    public EnrollmentDto(Enrollment enrollment, boolean deepCopyEnrollment) {
+    public EnrollmentDto(Enrollment enrollment, boolean deepCopyActivity) {
         this.id = enrollment.getId();
         this.motivation = enrollment.getMotivation();
         this.enrollmentDateTime = DateHandler.toISOString(enrollment.getEnrollmentDateTime());
@@ -33,7 +29,7 @@ public class EnrollmentDto {
                 .stream()
                 .anyMatch(p -> p.getVolunteer().getId().equals(enrollment.getVolunteer().getId()));
 
-        if (deepCopyEnrollment && (enrollment.getActivity() != null)) {
+        if (deepCopyActivity && (enrollment.getActivity() != null)) {
             setActivity(new ActivityDto(enrollment.getActivity(), false));
         }
     }

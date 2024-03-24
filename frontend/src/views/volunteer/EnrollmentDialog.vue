@@ -13,7 +13,7 @@
                 :rules="[(v) => !!v || 'Motivation is required']"
                 required
                 v-model="editEnrollment.motivation"
-                data-cy="nameInput"
+                data-cy="motivationInput"
               ></v-text-field>
             </v-col>
           </v-row>

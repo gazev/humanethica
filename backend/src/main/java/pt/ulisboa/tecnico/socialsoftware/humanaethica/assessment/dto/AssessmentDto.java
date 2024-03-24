@@ -54,7 +54,7 @@ public class AssessmentDto {
         this.institutionId = institutionId;
     }
 
-    public void getVolunteerName(String volunteerName) {
+    public void setVolunteerName(String volunteerName) {
         this.volunteerName = volunteerName;
     }
 

@@ -36,6 +36,15 @@ describe('Enrollment', () => {
     //  As a volunteer  
     //  - enroll in first activity
     cy.demoVolunteerLogin();
+    cy.intercept('POST', '/activities/*/enrollments').as('register');
+    cy.intercept('GET', '/activities').as('getActivities');
+    //  - enroll in first activity
+    cy.get('[data-cy="volunteerActivities"]').click();
+    cy.wait('@getActivities');
+    cy.get('[data-cy="applyForActivityButton"]').first().click();
+    cy.get('[data-cy="motivationInput"]').type(MOTIVATION);
+    cy.get('[data-cy="saveEnrollment"]').click();
+    cy.wait('@register');
     cy.logout();
 
     //  As a member:  

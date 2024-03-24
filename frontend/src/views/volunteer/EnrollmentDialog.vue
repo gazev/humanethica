@@ -10,7 +10,7 @@
             <v-col cols="12">
               <v-text-field
                 label="*Motivation"
-                :rules="[(v) => !!v || 'Motivation is required']"
+                :rules="[(v) => validMotivation(v) || 'Motivation must be longer than 10 characters']"
                 required
                 v-model="editEnrollment.motivation"
                 data-cy="motivationInput"
@@ -29,6 +29,7 @@
           Close
         </v-btn>
         <v-btn
+            :disabled="!isValidMotivation"
           color="blue-darken-1"
           variant="text"
           @click="createEnrollment"
@@ -53,6 +54,8 @@ export default class EnrollmentDialog extends Vue {
 
   editEnrollment: Enrollment = new Enrollment();
 
+  isValidMotivation: Boolean = false;
+
   cypressCondition: boolean = false;
 
   async createEnrollment() {
@@ -67,6 +70,13 @@ export default class EnrollmentDialog extends Vue {
         await this.$store.dispatch('error', error);
       }
     }
+  }
+
+  validMotivation(value: any){
+    if (value == null) return false;
+    if (value && typeof value === 'string' && value.length < 10) return false;
+    this.isValidMotivation = true;
+    return true;
   }
 }
 </script>

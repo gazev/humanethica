@@ -195,9 +195,6 @@ export default class VolunteerActivitiesView extends Vue {
     }
   }
 
-  async applyForActivity(activity: Activity){
-  }
-
   onOpenEnrollmentDialog(activity: Activity) {
     this.currentActivity = activity;
     this.editEnrollmentDialog = true;

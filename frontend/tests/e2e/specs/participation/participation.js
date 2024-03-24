@@ -27,13 +27,13 @@ describe('Participation', () => {
       .should('have.length', 2)
       .first()
       .children()
-      .should('have.length', 12);
+      .should('have.length', 13);
 
     // first activity should have 1 participation
     cy.get('[data-cy="memberActivitiesTable"] tbody tr')
       .first()
       .children()
-      .eq(3)
+      .eq(4)
       .should('contain', 1);
 
     // navigate to member InstitutionActivityEnrollmentsView
@@ -84,13 +84,13 @@ describe('Participation', () => {
       .should('have.length', 2)
       .first()
       .children()
-      .should('have.length', 12);
+      .should('have.length', 13);
 
     // check if first activity was updated, now with 2 participants
     cy.get('[data-cy="memberActivitiesTable"] tbody tr')
       .first()
       .children()
-      .eq(3)
+      .eq(4)
       .should('contain', 2);
   });
 });

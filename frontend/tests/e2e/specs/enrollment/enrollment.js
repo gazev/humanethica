@@ -62,7 +62,7 @@ describe('Enrollment', () => {
       .should('have.length', 1)
       .eq(0)
       .children()
-      .eq(0)
+      .eq(1)
       .should('contain', MOTIVATION);
 
     cy.logout();

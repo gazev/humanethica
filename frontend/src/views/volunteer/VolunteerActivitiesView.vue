@@ -43,12 +43,12 @@
           <v-tooltip v-if="verifyEnrollmentConditions(item)" bottom>
             <template v-slot:activator="{ on }">
               <v-icon
-                  class="mr-2 action-button"
-                  color="#0E4D92"
-                  v-on="on"
-                  data-cy="applyForActivityButton"
-                  @click="onOpenEnrollmentDialog(item)"
-              >fa-solid fa-user-plus
+                class="mr-2 action-button"
+                color="#0E4D92"
+                v-on="on"
+                data-cy="applyForActivityButton"
+                @click="onOpenEnrollmentDialog(item)"
+                >fa-solid fa-user-plus
               </v-icon>
             </template>
             <span>Apply for Activity</span>
@@ -181,8 +181,8 @@ export default class VolunteerActivitiesView extends Vue {
 
   verifyEnrollmentConditions(activity: Activity): boolean {
     return (
-        !(this.activityDeadlinePassed(activity)) &&
-        !(this.volunteerAlreadyApplied(activity))
+      !this.activityDeadlinePassed(activity) &&
+      !this.volunteerAlreadyApplied(activity)
     );
   }
 
@@ -192,7 +192,7 @@ export default class VolunteerActivitiesView extends Vue {
     return currentDate > activityDeadline;
   }
 
-  volunteerAlreadyApplied(activity: Activity){
+  volunteerAlreadyApplied(activity: Activity) {
     return this.volunteerEnrollments.some(
       (enrollment) => enrollment.activity.id === activity.id,
     );
@@ -202,7 +202,8 @@ export default class VolunteerActivitiesView extends Vue {
     await this.$store.dispatch('loading');
     try {
       this.activities = await RemoteServices.getActivities();
-      this.volunteerEnrollments = await RemoteServices.getVolunteerEnrollments();
+      this.volunteerEnrollments =
+        await RemoteServices.getVolunteerEnrollments();
       this.volunteerAssessments =
         await RemoteServices.getVolunteerAssessments();
       this.volunteerParticipations =
@@ -265,7 +266,7 @@ export default class VolunteerActivitiesView extends Vue {
       (assessment) => assessment.institutionId === activity.institution.id,
     );
   }
-  
+
   volunteerHasParticipation(activity: Activity) {
     return this.volunteerParticipations.some(
       (participation) => participation.activityId === activity.id,
@@ -291,7 +292,6 @@ export default class VolunteerActivitiesView extends Vue {
     this.currentActivity = null;
   }
 }
-
 </script>
 
 <style lang="scss" scoped></style>

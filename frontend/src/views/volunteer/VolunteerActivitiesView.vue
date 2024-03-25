@@ -53,7 +53,7 @@
             </template>
             <span>Apply for Activity</span>
           </v-tooltip>
-          <v-tooltip v-if="item.allowReview" bottom>
+          <v-tooltip v-if="verifyConditions(item)" bottom>
             <template v-slot:activator="{ on }">
               <v-icon
                 class="mr-2 action-button"

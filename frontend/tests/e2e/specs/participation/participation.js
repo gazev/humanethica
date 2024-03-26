@@ -11,7 +11,7 @@ describe('Participation', () => {
     cy.deleteAllButArs();
   });
 
-  it('ars login and get users', () => {
+  it('select participant', () => {
     cy.demoMemberLogin()
     cy.intercept('GET', '/users/*/getInstitution').as('getInstitutions');
     cy.intercept('GET', '/activities/*/enrollments').as('getEnrollments');

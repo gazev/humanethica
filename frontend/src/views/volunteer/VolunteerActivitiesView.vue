@@ -194,7 +194,7 @@ export default class VolunteerActivitiesView extends Vue {
 
   volunteerAlreadyApplied(activity: Activity) {
     return this.volunteerEnrollments.some(
-      (enrollment) => enrollment.activity.id === activity.id,
+      (enrollment) => enrollment.activityId === activity.id,
     );
   }
 

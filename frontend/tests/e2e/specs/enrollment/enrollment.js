@@ -22,7 +22,11 @@ describe('Enrollment', () => {
     cy.wait('@getInstitutions');
 
     //  - verify number of lines of activity table (3)       
-    cy.get('[data-cy="memberActivitiesTable"] tbody tr').should('have.length', 3);
+    cy.get('[data-cy="memberActivitiesTable"] tbody tr')
+      .should('have.length', 3)
+      .eq(0)
+      .children()
+      .should('have.length', 13);
     //  - Verify number of enrollments in 1st activity (0)
     cy.get('[data-cy="memberActivitiesTable"] tbody tr')
       .eq(0).children().eq(3).should('contain', INITIAL_NUMBER);
@@ -60,6 +64,10 @@ describe('Enrollment', () => {
     //  - verify number of lines of enrollments in 1st activity table (1) with correct motivation      
     cy.get('[data-cy="activityEnrollmentsTable"] tbody tr')
       .should('have.length', 1)
+      .eq(0)
+      .children()
+      .should('have.length', 5);
+    cy.get('[data-cy="activityEnrollmentsTable"] tbody tr')
       .eq(0)
       .children()
       .eq(1)
